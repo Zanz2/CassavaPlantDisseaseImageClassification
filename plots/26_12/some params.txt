@@ -1,0 +1,6 @@
+n_epochs = 10 # on final training this should be high (around 30 for my desktop pc)
+num_classes = 5 # 5 labels
+batch_size = 28 # minimum batch size for inception v3 is 2, good general range seems to be 20 to 32
+learning_rate = 0.0001
+
+optimizer = sgd
