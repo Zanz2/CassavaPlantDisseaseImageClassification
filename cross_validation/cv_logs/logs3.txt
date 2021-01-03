@@ -1,0 +1,696 @@
+---------------------
+---------------------
+Now cross validating vgg------------------------------------------
+---------------------
+---------------------
+n_iterations: 2
+n_required_iterations: 2
+n_possible_iterations: 2
+min_resources_: 5349
+max_resources_: 16047
+aggressive_elimination: False
+factor: 3
+----------
+iter: 0
+n_candidates: 4
+n_resources: 5349
+Fitting 3 folds for each of 4 candidates, totalling 12 fits
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.6746       0.6821        0.8984  207.5842
+      2        0.8812       0.7199        0.7951  164.4930
+      3        0.7428       0.7507        0.7406  165.4968
+      4        0.7032       0.7409        0.7185  159.6070
+      5        0.6503       0.7493        0.7159  159.6180
+[CV 1/3] END batch_size=17, lr=0.0001, optimizer__momentum=0.9, optimizer__weight_decay=0.0025; total time=15.2min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.6844       0.6737        0.8835  170.9280
+      2        0.9233       0.7087        0.7680  163.7360
+      3        0.7875       0.7367        0.7167  163.5700
+      4        0.7281       0.7605        0.6728  168.9329
+      5        0.6513       0.7759        0.6788  183.5997
+[CV 2/3] END batch_size=17, lr=0.0001, optimizer__momentum=0.9, optimizer__weight_decay=0.0025; total time=15.1min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.7696       0.6667        0.9470  181.9661
+      2        0.9439       0.7297        0.7739  174.4160
+      3        0.8050       0.7423        0.7188  173.9633
+      4        0.7400       0.7773        0.6063  173.8312
+      5        0.6672       0.8095        0.5686  173.8266
+[CV 3/3] END batch_size=17, lr=0.0001, optimizer__momentum=0.9, optimizer__weight_decay=0.0025; total time=15.5min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.6787       0.6793        0.9569  173.3090
+      2        0.8835       0.7157        0.8076  168.2760
+      3        0.7770       0.7395        0.7302  169.1560
+      4        0.7037       0.7353        0.7034  168.3890
+      5        0.6706       0.7619        0.6879  174.1920
+[CV 1/3] END batch_size=17, lr=0.0001, optimizer__momentum=0.9, optimizer__weight_decay=0.04; total time=15.0min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.7348       0.6597        0.9108  175.7319
+      2        0.8993       0.7241        0.7588  176.8825
+      3        0.7907       0.7353        0.7045  177.2009
+      4        0.7159       0.7563        0.7085  177.7994
+      5        0.6658       0.7619        0.6862  175.3471
+[CV 2/3] END batch_size=17, lr=0.0001, optimizer__momentum=0.9, optimizer__weight_decay=0.04; total time=15.5min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.7403       0.6681        0.9195  176.4398
+      2        0.9246       0.7199        0.7855  173.1575
+      3        0.8223       0.7661        0.6777  172.9641
+      4        0.7376       0.7717        0.6616  174.6414
+      5        0.6817       0.7941        0.6056  178.3127
+[CV 3/3] END batch_size=17, lr=0.0001, optimizer__momentum=0.9, optimizer__weight_decay=0.04; total time=15.4min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.3768       0.6639        0.9231  177.4736
+      2        0.8216       0.7381        0.6853  179.0183
+      3        0.6736       0.7619        0.6820  179.5474
+      4        0.5986       0.7675        0.6782  178.7733
+      5        0.5427       0.7997        0.5837  180.6438
+[CV 1/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.0025; total time=15.8min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.3713       0.6555        0.9447  182.6942
+      2        0.8758       0.7185        0.8230  178.0986
+      3        0.7237       0.7647        0.6540  176.3519
+      4        0.6295       0.7493        0.7973  175.9580
+      5        0.5714       0.7969        0.5875  185.7532
+[CV 2/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.0025; total time=15.8min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.3870       0.6499        0.9574  185.6074
+      2        0.7967       0.7675        0.6584  184.4811
+      3        0.6907       0.8067        0.5473  179.0894
+      4        0.6126       0.8221        0.4949  180.1798
+      5        0.5619       0.8319        0.4718  179.2088
+[CV 3/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.0025; total time=16.0min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.3279       0.6793        0.9758  179.2655
+      2        0.8227       0.7059        0.7648  179.8697
+      3        0.7122       0.7367        0.7234  176.2932
+      4        0.6121       0.7983        0.5857  173.8991
+      5        0.5618       0.7717        0.6729  175.7305
+[CV 1/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.04; total time=15.6min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.3606       0.6667        0.8841  176.1490
+      2        0.8201       0.7367        0.6972  177.1504
+      3        0.6896       0.7703        0.6831  184.0153
+      4        0.6153       0.7745        0.6419  181.3398
+      5        0.5707       0.7801        0.6241  177.7431
+[CV 2/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.04; total time=15.8min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.4067       0.6555        0.9453  181.5705
+      2        0.9069       0.7185        0.7835  179.2943
+      3        0.7673       0.7815        0.5958  180.4718
+      4        0.6425       0.7983        0.5284  176.8947
+      5        0.5947       0.8193        0.5178  174.4418
+[CV 3/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.04; total time=15.7min
+----------
+iter: 1
+n_candidates: 2
+n_resources: 16047
+Fitting 3 folds for each of 2 candidates, totalling 6 fits
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.0134       0.7626        0.6915  538.6530
+      2        0.6546       0.7808        0.6084  542.5910
+      3        0.5778       0.8033        0.5484  542.4066
+      4        0.5665       0.8168        0.5353  546.9089
+      5        0.5488       0.8037        0.5587  542.6827
+[CV 1/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.04; total time=47.8min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.0980       0.7397        0.7254  528.3366
+      2        0.6861       0.7575        0.6704  541.9649
+      3        0.5918       0.7612        0.7016  547.5273
+      4        0.5625       0.7603        0.6539  563.4977
+      5        0.5675       0.7766        0.6262  582.0993
+[CV 2/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.04; total time=48.7min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.9991       0.7659        0.6368  571.6679
+      2        0.6260       0.7813        0.6126  538.1757
+      3        0.5595       0.8033        0.5509  536.3652
+      4        0.5532       0.7860        0.5927  555.5673
+      5        0.5551       0.7813        0.5999  560.0438
+[CV 3/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.04; total time=48.7min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.0382       0.7458        0.7161  553.4083
+      2        0.6317       0.7902        0.5773  520.1098
+      3        0.5656       0.8117        0.5303  497.9655
+      4        0.5226       0.8257        0.5093  496.3630
+      5        0.4878       0.8187        0.5196  491.4190
+[CV 1/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.0025; total time=45.0min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.0543       0.6776        0.8833  495.1150
+      2        0.6601       0.7374        0.7566  498.1460
+      3        0.5640       0.7701        0.6774  497.9450
+      4        0.5222       0.8084        0.5728  493.1730
+      5        0.4862       0.8374        0.4796  491.1810
+[CV 2/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.0025; total time=43.6min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.0064       0.7916        0.5846  491.1410
+      2        0.6270       0.8192        0.5208  491.1270
+      3        0.5462       0.8355        0.4825  491.1320
+      4        0.5129       0.8336        0.4815  491.4750
+      5        0.4805       0.8439        0.4625  491.4550
+[CV 3/3] END batch_size=17, lr=0.0005, optimizer__momentum=0.9, optimizer__weight_decay=0.0025; total time=43.3min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.8845       0.7455        0.7085  739.5157
+      2        0.5729       0.7704        0.6340  736.0780
+      3        0.5165       0.8514        0.4514  735.7090
+      4        0.4821       0.8340        0.4869  736.9930
+      5        0.4597       0.8312        0.4795  736.3680
+---------------------
+---------------------
+Now cross validating google_net------------------------------------------
+---------------------
+---------------------
+n_iterations: 2
+n_required_iterations: 2
+n_possible_iterations: 2
+min_resources_: 5349
+max_resources_: 16047
+aggressive_elimination: False
+factor: 3
+----------
+iter: 0
+n_candidates: 4
+n_resources: 5349
+Fitting 3 folds for each of 4 candidates, totalling 12 fits
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.0679       0.6709        0.9211  103.4146
+      2        0.8403       0.7031        0.7889  98.3690
+      3        0.7295       0.7423        0.6987  98.5180
+      4        0.6429       0.7661        0.6387  98.3490
+      5        0.5660       0.7619        0.6143  98.3790
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 8.9min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.0663       0.6639        0.8931  98.3000
+      2        0.8430       0.7087        0.8143  98.4030
+      3        0.7156       0.7367        0.7320  98.5170
+      4        0.6215       0.7647        0.6596  98.4460
+      5        0.5581       0.7577        0.6546  98.3780
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 8.8min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.0823       0.6555        0.9208  98.3610
+      2        0.8730       0.7129        0.8124  98.3750
+      3        0.7568       0.7381        0.7215  99.0550
+      4        0.6762       0.7675        0.6583  98.4760
+      5        0.5967       0.7871        0.6238  98.4260
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 8.8min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.0688       0.6625        0.9178  98.5390
+      2        0.8482       0.7017        0.8136  98.3390
+      3        0.7368       0.7311        0.7320  98.4060
+      4        0.6538       0.7451        0.6739  98.3550
+      5        0.5635       0.7605        0.6583  98.3760
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 8.8min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.0552       0.6681        0.8770  98.4250
+      2        0.8280       0.7087        0.7885  98.4950
+      3        0.7134       0.7367        0.7095  98.8250
+      4        0.6295       0.7703        0.6634  98.3860
+      5        0.5671       0.7801        0.6310  98.5120
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 8.8min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.0859       0.6513        0.9170  98.3690
+      2        0.8765       0.7073        0.8012  98.3920
+      3        0.7629       0.7367        0.7352  98.4950
+      4        0.6629       0.7689        0.6549  98.4520
+      5        0.5876       0.7801        0.6292  98.3000
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 8.8min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9353       0.7073        0.8217  98.4180
+      2        0.6817       0.7717        0.6465  98.3390
+      3        0.6072       0.6975        0.7823  98.3800
+      4        0.5682       0.7087        0.7603  98.5060
+      5        0.5373       0.7213        0.7765  98.3920
+[CV 1/3] END batch_size=32, lr=0.01, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 8.8min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9311       0.6625        0.9419  98.6530
+      2        0.6861       0.7479        0.7031  98.3230
+      3        0.5818       0.6667        0.9902  98.4140
+      4        0.5408       0.5070        1.3752  98.4210
+      5        0.5372       0.5294        1.2359  98.3530
+[CV 2/3] END batch_size=32, lr=0.01, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 8.8min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9900       0.7213        0.7562  98.4140
+      2        0.7303       0.5042        1.3021  98.5220
+      3        0.6293       0.6793        0.8217  98.8770
+      4        0.5787       0.7409        0.7094  98.6620
+      5        0.5366       0.4146        1.6614  98.4460
+[CV 3/3] END batch_size=32, lr=0.01, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 8.8min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9480       0.7101        0.8725  98.4800
+      2        0.7393       0.7507        0.6806  98.3720
+      3        0.6196       0.7493        0.6527  98.3560
+      4        0.5566       0.7437        0.7112  98.3880
+      5        0.5323       0.7927        0.6306  98.4780
+[CV 1/3] END batch_size=32, lr=0.01, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 8.8min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9421       0.7185        0.9436  98.5710
+      2        0.6667       0.6779        1.0021  98.3410
+      3        0.6090       0.7311        0.9375  98.4160
+      4        0.5324       0.7353        0.7759  98.9620
+      5        0.4839       0.7871        0.7607  98.4760
+[CV 2/3] END batch_size=32, lr=0.01, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 8.8min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9602       0.7409        0.7768  98.5040
+      2        0.8111       0.6148        1.0414  98.2250
+      3        0.6666       0.7521        0.6682  98.2450
+      4        0.5682       0.7913        0.6330  98.4710
+      5        0.5335       0.6695        0.9072  98.5840
+[CV 3/3] END batch_size=32, lr=0.01, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 8.8min
+----------
+iter: 1
+n_candidates: 2
+n_resources: 16047
+Fitting 3 folds for each of 2 candidates, totalling 6 fits
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.9128       0.7397        0.7016  297.2330
+      2        0.6477       0.7958        0.5707  295.2310
+      3        0.5425       0.8159        0.5138  295.1420
+      4        0.4890       0.8140        0.5303  295.1220
+      5        0.4355       0.8238        0.4968  295.1970
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time=26.3min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.9042       0.7449        0.6972  294.9990
+      2        0.6518       0.7893        0.5814  295.4020
+      3        0.5416       0.8121        0.5248  295.0010
+      4        0.4820       0.8079        0.5362  295.3120
+      5        0.4401       0.8136        0.5309  295.1340
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time=26.3min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.8986       0.7322        0.7075  295.0370
+      2        0.6598       0.7883        0.5796  295.0870
+      3        0.5591       0.8234        0.5182  294.9770
+      4        0.4952       0.8248        0.5003  295.1960
+      5        0.4604       0.8346        0.4799  295.4020
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time=26.3min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.9087       0.7379        0.7079  295.2770
+      2        0.6449       0.7981        0.5665  295.4920
+      3        0.5363       0.8196        0.5079  297.0010
+      4        0.4798       0.8159        0.4929  295.5720
+      5        0.4455       0.8252        0.4981  295.1590
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time=26.3min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.9020       0.7453        0.7197  295.2570
+      2        0.6474       0.7949        0.5746  295.3810
+      3        0.5445       0.7977        0.5614  295.2410
+      4        0.4739       0.8210        0.4946  295.5050
+      5        0.4386       0.8346        0.4891  295.4280
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time=26.3min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.9080       0.7397        0.7038  295.5973
+      2        0.6528       0.8079        0.5488  295.9360
+      3        0.5549       0.8182        0.5143  295.5160
+      4        0.4978       0.8294        0.4880  295.6580
+      5        0.4468       0.8350        0.4920  295.4000
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time=26.3min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.8342       0.7813        0.6123  443.8060
+      2        0.5849       0.8227        0.4972  443.2590
+      3        0.5011       0.8424        0.4578  442.8790
+      4        0.4583       0.8377        0.4478  443.5500
+      5        0.4188       0.8417        0.4461  443.5990
+---------------------
+---------------------
+Now cross validating resnet------------------------------------------
+---------------------
+---------------------
+n_iterations: 2
+n_required_iterations: 2
+n_possible_iterations: 2
+min_resources_: 5349
+max_resources_: 16047
+aggressive_elimination: False
+factor: 3
+----------
+iter: 0
+n_candidates: 4
+n_resources: 5349
+Fitting 3 folds for each of 4 candidates, totalling 12 fits
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.0037       0.6933        0.8015  71.0761
+      2        0.7077       0.7605        0.6655  69.7130
+      3        0.6136       0.7661        0.6171  69.9810
+      4        0.5531       0.7787        0.6160  69.8170
+      5        0.5234       0.8039        0.5734  69.7720
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 6.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.0148       0.7199        0.7659  69.5750
+      2        0.7015       0.7745        0.6334  69.5900
+      3        0.6082       0.7927        0.5844  70.3080
+      4        0.5435       0.8179        0.5509  69.6860
+      5        0.5100       0.8067        0.5646  69.6980
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 6.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9956       0.6961        0.7828  69.7680
+      2        0.7151       0.7759        0.6253  69.7210
+      3        0.6150       0.8025        0.5828  72.9603
+      4        0.5318       0.8025        0.5494  70.0680
+      5        0.4896       0.8207        0.5300  69.9780
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 6.4min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.0098       0.7115        0.7952  70.0090
+      2        0.7043       0.7507        0.6850  69.9090
+      3        0.6211       0.7969        0.6068  69.8810
+      4        0.5580       0.7871        0.5909  70.1990
+      5        0.5080       0.7913        0.5619  70.1420
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 6.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.0159       0.7255        0.7580  69.8720
+      2        0.7015       0.7689        0.6433  70.1050
+      3        0.5964       0.7941        0.5931  70.1300
+      4        0.5498       0.8165        0.5578  69.8990
+      5        0.5064       0.8221        0.5301  69.6590
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 6.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.0046       0.6975        0.7736  69.6920
+      2        0.7258       0.7619        0.6478  69.7170
+      3        0.6152       0.7871        0.5750  71.6205
+      4        0.5428       0.7899        0.5667  72.0357
+      5        0.5004       0.8109        0.5326  71.4540
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 6.4min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9257       0.6863        0.8916  70.2430
+      2        0.6882       0.7073        0.7417  70.0550
+      3        0.6095       0.7283        0.7268  70.2985
+      4        0.5940       0.7619        0.6988  70.3170
+      5        0.5350       0.7675        0.6724  70.2200
+[CV 1/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 6.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.8859       0.6961        0.8067  70.0630
+      2        0.7994       0.7577        0.6587  69.8670
+      3        0.6215       0.7787        0.6394  69.8470
+      4        0.6011       0.7689        0.6767  69.7455
+      5        0.5488       0.7675        0.6528  70.3940
+[CV 2/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 6.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9284       0.7241        0.7493  69.2520
+      2        0.6527       0.7423        0.7190  69.4710
+      3        0.5756       0.7801        0.6345  69.5580
+      4        0.5355       0.7591        0.7384  69.8990
+      5        0.5034       0.6345        0.9740  69.5100
+[CV 3/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 6.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9366       0.7367        0.7868  69.5410
+      2        0.6798       0.7171        0.7254  69.3550
+      3        0.6128       0.7773        0.6685  69.4630
+      4        0.5431       0.7913        0.6705  69.8660
+      5        0.5168       0.7535        0.6801  69.3270
+[CV 1/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 6.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.8928       0.7409        0.7386  69.5200
+      2        0.7524       0.7241        0.7456  69.4190
+      3        0.6313       0.7773        0.6701  69.3160
+      4        0.5706       0.7801        0.5996  69.6180
+      5        0.4913       0.7969        0.5760  69.4360
+[CV 2/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 6.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        0.9270       0.7465        0.6807  69.4940
+      2        0.6482       0.7563        0.6572  69.6420
+      3        0.5617       0.8025        0.5813  69.5120
+      4        0.4790       0.7717        0.6991  69.3700
+      5        0.4653       0.7479        0.6926  69.4840
+[CV 3/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 6.3min
+----------
+iter: 1
+n_candidates: 2
+n_resources: 16047
+Fitting 3 folds for each of 2 candidates, totalling 6 fits
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.7951       0.7864        0.5895  209.1771
+      2        0.5779       0.8173        0.5125  208.6800
+      3        0.5174       0.8294        0.4777  208.9280
+      4        0.4797       0.8393        0.4638  208.6000
+      5        0.4565       0.8304        0.4628  209.0800
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time=18.9min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.8024       0.7720        0.6035  209.6760
+      2        0.5635       0.8168        0.5122  208.8800
+      3        0.5002       0.8304        0.4851  208.9610
+      4        0.4690       0.8350        0.4721  209.3820
+      5        0.4368       0.8332        0.4729  209.1040
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time=18.9min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.8015       0.7836        0.6008  208.8060
+      2        0.5697       0.8098        0.5298  209.2280
+      3        0.5099       0.8304        0.4946  208.8540
+      4        0.4819       0.8290        0.5097  209.0580
+      5        0.4608       0.8355        0.4903  209.0030
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time=18.9min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.7936       0.7860        0.5935  209.0140
+      2        0.5797       0.8192        0.5143  209.1020
+      3        0.5248       0.8285        0.4966  213.9706
+      4        0.4761       0.8262        0.4795  216.6788
+      5        0.4484       0.8383        0.4812  216.0197
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time=19.2min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.8022       0.7818        0.5941  216.8772
+      2        0.5565       0.8150        0.5189  216.8337
+      3        0.5029       0.8285        0.4732  214.9375
+      4        0.4545       0.8252        0.4803  215.0523
+      5        0.4385       0.8304        0.4736  215.4100
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time=19.5min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.7982       0.7720        0.6112  216.1423
+      2        0.5652       0.8047        0.5513  215.0220
+      3        0.5154       0.8257        0.4966  217.3810
+      4        0.4887       0.8322        0.4789  215.2641
+      5        0.4589       0.8355        0.4722  216.7716
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time=19.5min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        0.7286       0.8028        0.5489  327.5882
+      2        0.5283       0.8315        0.4852  326.8671
+      3        0.4782       0.8368        0.4616  318.4445
+      4        0.4481       0.8449        0.4465  313.1660
+      5        0.4238       0.8486        0.4253  313.3430
+---------------------
+---------------------
+Now cross validating alexnet------------------------------------------
+---------------------
+---------------------
+n_iterations: 2
+n_required_iterations: 2
+n_possible_iterations: 2
+min_resources_: 5349
+max_resources_: 16047
+aggressive_elimination: False
+factor: 3
+----------
+iter: 0
+n_candidates: 4
+n_resources: 5349
+Fitting 3 folds for each of 4 candidates, totalling 12 fits
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.6272       0.6275        1.0258  58.1390
+      2        1.0113       0.6443        0.9431  57.5680
+      3        0.9014       0.6471        0.9414  57.6250
+      4        0.8604       0.6541        0.9011  58.3000
+      5        0.8111       0.6373        1.1025  57.4170
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 5.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.6210       0.5896        1.0958  57.2550
+      2        1.0529       0.6527        0.9749  57.7590
+      3        0.9663       0.6835        0.8952  57.5880
+      4        0.8910       0.7227        0.7757  57.5930
+      5        0.8528       0.7269        0.7572  57.5720
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 5.2min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.8158       0.6317        1.0189  57.9950
+      2        0.9658       0.6681        0.8672  57.4530
+      3        0.9220       0.6947        0.8233  57.5980
+      4        0.8510       0.7143        0.7706  57.7160
+      5        0.8040       0.7269        0.7344  57.7420
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 5.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.7428       0.6331        1.0203  57.6370
+      2        1.0014       0.6359        0.9604  57.8710
+      3        0.9202       0.6723        0.9065  57.7240
+      4        0.8592       0.6625        0.9139  57.7120
+      5        0.7968       0.6415        1.0045  57.8960
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 5.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.6402       0.4916        1.2945  57.7600
+      2        1.0636       0.6807        0.9084  57.6910
+      3        0.9255       0.7059        0.7906  57.7310
+      4        0.8617       0.7073        0.7810  57.8720
+      5        0.8213       0.7297        0.7277  57.4270
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 5.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        1.7422       0.6317        0.9557  57.6570
+      2        0.9744       0.6807        0.9067  57.8350
+      3        0.9120       0.6821        0.8604  57.9720
+      4        0.8601       0.7171        0.7823  57.8860
+      5        0.7997       0.7199        0.7253  57.8420
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 5.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1           nan       0.0476           nan  57.8950
+      2           nan       0.0476           nan  57.8860
+      3           nan       0.0476           nan  57.6840
+      4           nan       0.0476           nan  57.6620
+      5           nan       0.0476           nan  57.7960
+[CV 1/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 5.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1           nan       0.0546           nan  58.6770
+      2           nan       0.0546           nan  57.9660
+      3           nan       0.0546           nan  57.7490
+      4           nan       0.0546           nan  57.8190
+      5           nan       0.0546           nan  57.9380
+[CV 2/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 5.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1           nan       0.0546           nan  57.8450
+      2           nan       0.0546           nan  57.8140
+      3           nan       0.0546           nan  57.8610
+      4           nan       0.0546           nan  57.7190
+      5           nan       0.0546           nan  57.9510
+[CV 3/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time= 5.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1           nan       0.0476           nan  58.2020
+      2           nan       0.0476           nan  57.9210
+      3           nan       0.0476           nan  57.7780
+      4           nan       0.0476           nan  58.0620
+      5           nan       0.0476           nan  57.7920
+[CV 1/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 5.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1           nan       0.0546           nan  57.8930
+      2           nan       0.0546           nan  58.3920
+      3           nan       0.0546           nan  57.9760
+      4           nan       0.0546           nan  57.7260
+      5           nan       0.0546           nan  57.8620
+[CV 2/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 5.3min
+  epoch    train_loss    valid_acc    valid_loss      dur
+-------  ------------  -----------  ------------  -------
+      1        2.2544       0.6176        1.2213  57.7990
+      2        1.2058       0.6176        1.2140  58.0340
+      3        1.2051       0.6176        1.2099  57.9340
+      4        1.2040       0.6176        1.2079  57.8110
+      5        1.2051       0.6176        1.2025  57.8660
+[CV 3/3] END batch_size=32, lr=0.008, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time= 5.3min
+----------
+iter: 1
+n_candidates: 2
+n_resources: 16047
+Fitting 3 folds for each of 2 candidates, totalling 6 fits
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.1843       0.6603        1.0265  173.7840
+      2        0.8746       0.6958        0.8154  172.7260
+      3        0.7773       0.7397        0.6938  173.3110
+      4        0.7131       0.7612        0.6490  173.2440
+      5        0.6862       0.7556        0.6403  176.2372
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time=15.9min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.2164       0.6453        0.9110  173.5470
+      2        0.8376       0.7089        0.7694  173.4010
+      3        0.7581       0.7421        0.7363  173.4390
+      4        0.7108       0.7593        0.6539  174.1280
+      5        0.6600       0.7766        0.6296  174.2690
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time=15.8min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.2138       0.6729        0.8646  173.2420
+      2        0.8747       0.7182        0.7742  173.6490
+      3        0.7636       0.7467        0.7017  173.5380
+      4        0.7137       0.7537        0.6554  173.8360
+      5        0.6816       0.7411        0.6880  174.2290
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.01; total time=15.8min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.1933       0.6584        1.0011  173.0660
+      2        0.8755       0.6907        0.8165  173.4220
+      3        0.7903       0.7266        0.7317  173.3190
+      4        0.7059       0.7360        0.7171  173.0700
+      5        0.6918       0.7388        0.7236  173.1290
+[CV 1/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time=15.8min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.2614       0.6832        0.8421  173.5580
+      2        0.8520       0.7224        0.7399  173.2010
+      3        0.7617       0.7654        0.6789  173.9750
+      4        0.7067       0.7589        0.6816  173.3830
+      5        0.6801       0.7533        0.6769  173.1210
+[CV 2/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time=15.8min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.2075       0.6780        0.8631  173.0750
+      2        0.8776       0.6986        0.7963  173.5660
+      3        0.7774       0.7229        0.7376  173.2380
+      4        0.7255       0.7453        0.6819  173.8370
+      5        0.6830       0.7528        0.6962  183.9527
+[CV 3/3] END batch_size=32, lr=0.001, optimizer__momentum=0.9, optimizer__weight_decay=0.001; total time=16.2min
+  epoch    train_loss    valid_acc    valid_loss       dur
+-------  ------------  -----------  ------------  --------
+      1        1.1117       0.7003        0.8111  297.1172
+      2        0.7970       0.7498        0.6793  297.1433
+      3        0.7050       0.7576        0.6543  305.4496
+      4        0.6688       0.7523        0.6681  288.0985
+	  5        0.6432       0.7495        0.6895  274.8145
+[{'batch_size': 17, 'lr': 0.0005, 'optimizer__momentum': 0.9, 'optimizer__weight_decay': 0.0025}, 
+{'batch_size': 32, 'lr': 0.001, 'optimizer__momentum': 0.9, 'optimizer__weight_decay': 0.001},
+ {'batch_size': 32, 'lr': 0.001, 'optimizer__momentum': 0.9, 'optimizer__weight_decay': 0.001},
+ {'batch_size': 32, 'lr': 0.001, 'optimizer__momentum': 0.9, 'optimizer__weight_decay': 0.01}]
