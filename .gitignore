@@ -1,3 +1,4 @@
 data/
+cross_validation/models
 !data/.gitkeep
 resnet.pt
