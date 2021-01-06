@@ -43,7 +43,7 @@ from skorch.helper import SliceDataset
 
 from pathlib import Path
 from IPython.core.debugger import set_trace
-#get_ipython().run_line_magic('matplotlib', 'inline') # doesnt work in pycharm
+#get_ipython().run_line_magic('matplotlib', 'inline')
 
 use_cuda = True
 if not torch.cuda.is_available() or not use_cuda:
@@ -181,29 +181,29 @@ print(test_dataset[0][0].size())
 n_epochs = 80 # on final training this should be high (around 30 for my desktop pc)
 num_classes = 5 # 5 labels
 batch_size = 32 # minimum batch size for inception v3 is 2, 20 to 32 seems to be fine for me (no cuda vram errors)
-test_batch_size = 8 # higher image resolution so bigger size
+test_batch_size = 10 # higher image resolution so bigger size
 early_stopping_threshold = 7 # this many epochs of no improvement stops trainining
 params_dict_main = {
     "vgg": {
-        "lr": 0.0005, #0.0005 or 0.001
+        "lr": 0.0003, #0.0005 or 0.001
         "wd": 0.001, #0.001 or 0.0025 used for CV
-        "batch": 18,
-        "spe": len(train_dataset)/18,
+        "batch": 20,
+        "spe": len(train_dataset)/20,
     },
     "google_net": {
-        "lr": 0.001, # 0.001 or 0.0003
+        "lr": 0.0003, # 0.001 or 0.0003
         "wd": 0.001, #0.001 or 0.01
         "batch": 32,
         "spe": len(train_dataset)/32,
     },
     "resnet": {
-        "lr": 0.001, # 0.001 or 0.0003
+        "lr": 0.0003, # 0.001 or 0.0003
         "wd": 0.001, #0.001 or 0.01
         "batch": 32,
         "spe": len(train_dataset)/32,
     },
     "alexnet": {
-        "lr": 0.001, # 0.001 or 0.0003
+        "lr": 0.0003, # 0.001 or 0.0003
         "wd": 0.001,
         "batch": 32,
         "spe": len(train_dataset)/32,
@@ -223,13 +223,13 @@ params_dict_main = {
 
 # Show an image from the dataset
 
-# In[9]:
+# In[24]:
 
 
-def show_image(index):  
-    plt.imshow(img.imread('{}/{}'.format(path,labelled_dataset.values[index][0]))) # set the correct resolution here
-    print('Index: {}'.format(labelled_dataset.values[index][1]))
-    print('Filename: {}'.format(labelled_dataset.values[index][0]))
+def show_image(index, image_dataset=labelled_dataset):  
+    plt.imshow(img.imread('{}/{}'.format(path,image_dataset.values[index][0]))) # set the correct resolution here
+    print('Correct class: {}'.format(mapping_dict[str(image_dataset.values[index][1])]))
+    print('Filename: {}'.format(image_dataset.values[index][0]))
     
 show_image(6)
 
@@ -267,7 +267,6 @@ def get_model(model_string):
         net.fc = nn.Linear(4096, num_classes)
 
     if model_string == "resnet":
-        #net = torch.hub.load('pytorch/vision:v0.2.2', 'resnet18', pretrained=True) 
         net = models.resnet18(pretrained=True)
         net = net.cuda() if use_cuda else net
         num_ftrs = net.fc.in_features
@@ -328,12 +327,14 @@ def plot_model_acc(model_name, save_only=True):
 
 
 #from optimizers import DemonRanger # uncomment if using alternative optimizers
-#import adabound
+import adabound
 # this should be used after finding good starting parameters with the cross validation parameter tuning below
 # Parameters
-skip_this = False # find good starting parameters first, using cv, then set this to false
+skip_this = True # find good starting parameters first, using cv, then set this to false
 model_index = 0 # set model index to use here
-string_array = ["vgg","google_net","resnet","alexnet"] #["vgg","google_net","resnet","alexnet"] 
+
+# commented models are considered done from my part
+string_array = ["vgg"] #["google_net","resnet","alexnet","vgg"]
 
 torch.backends.cudnn.benchmark = True # speeds up training by some variable amount
 first_run = True
@@ -355,7 +356,7 @@ while(True and not skip_this):
         train_dataloader = DataLoader(dataset = train_dataset,batch_size = params_dict_main[model_name]["batch"],shuffle=True,num_workers=0,pin_memory=True,drop_last=True)
         valid_dataloader = DataLoader(dataset = valid_dataset,batch_size = test_batch_size,shuffle=False,num_workers=0,pin_memory=True,drop_last=True)
         criterion = nn.CrossEntropyLoss() # used this since we have 5 mutually exclusive classes
-        ''' # other options for optimizers
+        ''' # other options for optimizers after SGD
         optimizer = DemonRanger(params=net.parameters(),
                                 lr=params_dict_main[model_name]["lr"],
                                 weight_decay=params_dict_main[model_name]["wd"],
@@ -373,10 +374,10 @@ while(True and not skip_this):
                                 use_gc=False, #disables gradient centralization
                                 amsgrad=False # disables amsgrad
                                 )
-        optimizer = adabound.AdaBound(net.parameters(), lr=params_dict_main[model_name]["lr"], final_lr=0.1) 
+        optimizer = adabound.AdaBound(net.parameters(), lr=params_dict_main[model_name]["lr"], final_lr=0.1)
+        ''' 
 
-        '''
-        optimizer = optim.SGD(net.parameters(),  # the optimizer that was used for CV
+        optimizer = optim.SGD(net.parameters(),  # the same optimizer that was used for CV
             lr=params_dict_main[model_name]["lr"],
             weight_decay=params_dict_main[model_name]["wd"],
             momentum=0.9
@@ -394,6 +395,7 @@ while(True and not skip_this):
         valid_loss_min = torch.load('./cross_validation/models/{}_best_model_TRAIN_best_loss.pt'.format(model_name))
     else:
         valid_loss_min = np.Inf
+    print("initial loss: {}".format(valid_loss_min))
     
     val_loss = []
     val_acc = []
@@ -467,7 +469,7 @@ while(True and not skip_this):
 # 
 # Cross validation is done on the training set only, so 75% of the total, this set is then split into k folds (in our case 3) then the model is trained on k-1 folds and evaluated on the remaining 1 fold, after the cross validation, i evaluate the models on the before unseen test set (25% of total)
 
-# In[ ]:
+# In[14]:
 
 
 import gc
@@ -476,7 +478,7 @@ gc.collect()
 torch.cuda.empty_cache()
 
 
-# In[ ]:
+# In[15]:
 
 
 
@@ -515,7 +517,7 @@ params_dict = { # possible parameter combinations to evaluate
 best_estimators = []
 
 
-# In[ ]:
+# In[16]:
 
 
 string_array = ["vgg","google_net","resnet","alexnet"] # also the order
@@ -574,7 +576,7 @@ if not skip_this:
         json.dump(best_params_models, jsonfile)  
 
 
-# In[ ]:
+# In[17]:
 
 
 # here load all the best models and evaluate each on the test set 
@@ -582,7 +584,14 @@ if not skip_this:
 
 test_batch = 15
 y_test = np.array(test.label)
-string_array = ["vgg","google_net","resnet","alexnet"] # ["vgg","google_net","resnet","alexnet"]
+string_array = ["google_net","resnet","alexnet","vgg"]  # ["google_net","resnet","alexnet","vgg"]
+
+model_pred_dict = {
+    "google_net": [],
+    "resnet": [],
+    "alexnet": [],
+    "vgg": []
+}
 for model_name in string_array:
     model = get_saved_model(model_name,"TRAIN",skorch_wrap=True)
     y_predictions = []
@@ -598,7 +607,52 @@ for model_name in string_array:
         temp_list = torch.stack(temp_list)
         y_predictions.append(model.predict(temp_list))
     y_predictions = [item for sublist in y_predictions for item in sublist]
+    model_pred_dict[model_name] = y_predictions
     print("!!!! Model {} Accuracy on test set: {}, f1macro-score: {}".format(model_name,accuracy_score(y_test,y_predictions),f1_score(y_test,y_predictions,average='macro')))
+
+
+# In[18]:
+
+
+wrong_google = np.equal(model_pred_dict["google_net"],y_test)
+wrong_alex = np.equal(model_pred_dict["alexnet"],y_test)
+wrong_vgg = np.equal(model_pred_dict["resnet"],y_test)
+wrong_resnet = np.equal(model_pred_dict["vgg"],y_test)
+count = 0
+wrong_google_count = 0
+wrong_alex_count = 0
+wrong_vgg_count = 0
+wrong_resnet_count = 0
+
+for index,value in enumerate(y_test):
+    if wrong_google[index] == False and wrong_alex[index] == False and wrong_vgg[index] == False and wrong_resnet[index] == False:
+        count += 1
+    if wrong_google[index] == False:
+        wrong_google_count += 1
+    if wrong_alex[index] == False:
+        wrong_alex_count += 1
+    if wrong_vgg[index] == False:
+        wrong_vgg_count += 1
+    if wrong_resnet[index] == False:
+        wrong_resnet_count += 1
+print("Number of samples that every one of the models got wrong: {}".format(count))
+print("Number of samples that google net got wrong: {}".format(wrong_google_count))
+print("Number of samples that alexnet got wrong: {}".format(wrong_alex_count))
+print("Number of samples that vgg got wrong: {}".format(wrong_vgg_count))
+print("Number of samples that resnet got wrong: {}".format(wrong_resnet_count))
+
+
+# In[25]:
+
+
+model_name = "google_net"
+missclassification_index = 30 # Show the N-th incorrect image prediction
+
+
+mask_of_predictions = model_pred_dict[model_name] == y_test
+incorrect_indices = [i for i, e in enumerate(list(mask_of_predictions)) if e == False]
+show_image(incorrect_indices[missclassification_index],test) 
+print("Predicted: {}".format(mapping_dict[str(model_pred_dict[model_name][incorrect_indices[missclassification_index]])]))
 
 
 # In[ ]:
