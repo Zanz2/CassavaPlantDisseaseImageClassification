@@ -31,10 +31,19 @@ import pickle
 
 from torch import FloatTensor, LongTensor, nn, optim
 from torch.utils.data import Dataset, DataLoader, TensorDataset
-from sklearn.model_selection import train_test_split
 from torchvision import transforms, datasets, models
+
+from sklearn.experimental import enable_halving_search_cv # noqa this is a new recently added feature im trying out
+from sklearn.model_selection import train_test_split,GridSearchCV,HalvingGridSearchCV
+from sklearn.metrics import accuracy_score, f1_score
+
+from skorch import NeuralNetClassifier
+from skorch.dataset import CVSplit
+from skorch.helper import SliceDataset
+
+from pathlib import Path
 from IPython.core.debugger import set_trace
-get_ipython().run_line_magic('matplotlib', 'inline')
+#get_ipython().run_line_magic('matplotlib', 'inline') # doesnt work in pycharm
 
 use_cuda = True
 if not torch.cuda.is_available() or not use_cuda:
@@ -65,8 +74,11 @@ print(mapping_dict)
 #labelled_dataset = labelled_dataset.head(250) # tiny dataset for fast debugging, comment when training for real
 
 # Parameters
-train, test = train_test_split(labelled_dataset, test_size=0.25, random_state=420, stratify=labelled_dataset.label)
-# random state was originally 7
+train, test = train_test_split(labelled_dataset, test_size=0.25, random_state=7, stratify=labelled_dataset.label)
+# split made with random state 7 and 0.25 stratified test size was originally used for training and testing on CV and on the main loop,
+# so the models that I have saved used this split
+
+train, validation = train_test_split(train, test_size=0.25, random_state=7, stratify=train.label) # further split the training set into validation
 
 should_match_index = 6
 print(labelled_dataset.values[should_match_index])
@@ -127,6 +139,7 @@ cassava_transform = transforms.Compose([
     transforms.ToPILImage(),
     transforms.Resize((600,600)),
     transforms.RandomHorizontalFlip(),
+    #transforms.RandomRotation(180),
     transforms.RandomResizedCrop(340), # minimum is 299 for inceptionv3 224. Bigger image = more vram usage
     transforms.ToTensor(),
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -136,7 +149,7 @@ cassava_transform = transforms.Compose([
 cassava_test_transform = transforms.Compose([
     transforms.ToPILImage(),
     transforms.Resize((600,600)),
-    #transforms.CenterCrop(340), #minimum is 299 for inceptionv3 224 for everything else
+    #transforms.CenterCrop(340), 
     transforms.ToTensor(),
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     # (the means and standard deviations of each of the 3 image channels)
@@ -144,7 +157,8 @@ cassava_test_transform = transforms.Compose([
 
 train_dataset = CassavaDataset(train, path, cassava_transform )
 test_dataset = CassavaDataset(test, path, cassava_test_transform)
-valid_dataset = CassavaDataset(submission, test_path, cassava_test_transform)
+valid_dataset = CassavaDataset(validation, path, cassava_test_transform)
+#valid_dataset = CassavaDataset(submission, test_path, cassava_test_transform)
 
 print(len(train_dataset))
 print(len(test_dataset))
@@ -155,41 +169,47 @@ print(len(labelled_dataset))
 # In[7]:
 
 
-train_dataset[0] # how a transformed image tensor looks like, its label is 2
+print(train_dataset[0]) # how a transformed image tensor looks like, its label is 2
+print(train_dataset[0][0].size())
+print(test_dataset[0][0].size())
 
 
 # In[8]:
 
 
 # Parameters
-n_epochs = 70 # on final training this should be high (around 30 for my desktop pc)
+n_epochs = 80 # on final training this should be high (around 30 for my desktop pc)
 num_classes = 5 # 5 labels
 batch_size = 32 # minimum batch size for inception v3 is 2, 20 to 32 seems to be fine for me (no cuda vram errors)
-steps_per_epoch = len(train_dataset)/batch_size
-early_stopping_threshold = 5 # this many epochs of no improvement stops trainining
+test_batch_size = 8 # higher image resolution so bigger size
+early_stopping_threshold = 7 # this many epochs of no improvement stops trainining
 params_dict_main = {
     "vgg": {
-        "lr": 0.0005,
-        "wd": 0.0025,
+        "lr": 0.0005, #0.0005 or 0.001
+        "wd": 0.001, #0.001 or 0.0025 used for CV
+        "batch": 18,
+        "spe": len(train_dataset)/18,
     },
     "google_net": {
-        "lr": 0.001,
-        "wd": 0.001,
+        "lr": 0.001, # 0.001 or 0.0003
+        "wd": 0.001, #0.001 or 0.01
+        "batch": 32,
+        "spe": len(train_dataset)/32,
     },
     "resnet": {
-        "lr": 0.001,
-        "wd": 0.001,
+        "lr": 0.001, # 0.001 or 0.0003
+        "wd": 0.001, #0.001 or 0.01
+        "batch": 32,
+        "spe": len(train_dataset)/32,
     },
     "alexnet": {
-        "lr": 0.001,
-        "wd": 0.01,
+        "lr": 0.001, # 0.001 or 0.0003
+        "wd": 0.001,
+        "batch": 32,
+        "spe": len(train_dataset)/32,
     }
 }
 
-
-train_dataloader = DataLoader(dataset = train_dataset,batch_size = batch_size,shuffle=True,num_workers=0,pin_memory=True,drop_last=True)
-valid_dataloader = DataLoader(dataset = valid_dataset,batch_size = batch_size,shuffle=False,num_workers=0,pin_memory=True,drop_last=True)
-test_dataloader = DataLoader(dataset = test_dataset,batch_size = batch_size,shuffle=False,num_workers=0,pin_memory=True,drop_last=True)
 # pin memory should be enabled if you use cuda cores to speed up transfer between cpu and gpu,
 # drop last is there if the last batch contains 1 sample for inception v3 (if its not enabled for inception theres an error)
 # num workers is 0 unless you're using linux or mac os x, because paralelization in windows is broken
@@ -255,13 +275,34 @@ def get_model(model_string):
         
     net.fc = net.fc.cuda() if use_cuda else net.fc    
     return net
+
+# RUN THIS if models are already saved
+def get_saved_model(model_name, model_type="TRAIN", skorch_wrap=False): # model type is either "CV" or "TRAIN" depending on how it was trained
+    if model_type == "CV": # this return skorch NeuralNetClassifier object unless skorch wrap is true
+        with open(r"./cross_validation/models/{}_best_model_{}.pickle".format(model_name,model_type), "rb") as input_file:
+            e = pickle.load(input_file)
+        if not skorch_wrap:
+            e = e.module_
+        return e
+    elif model_type == "TRAIN": # this returns torch model
+        e = torch.load("./cross_validation/models/{}_best_model_{}.pt".format(model_name,model_type))
+        if skorch_wrap:
+            e = NeuralNetClassifier(
+                e,
+                max_epochs=5,
+                optimizer=torch.optim.SGD,
+                criterion=nn.CrossEntropyLoss,
+                device=device,
+            )
+            e.initialize()
+        return e
     
 def accuracy(out, labels):
     _,pred = torch.max(out, dim=1)
     return torch.sum(pred==labels).item()
 
 
-# Do evaluation, (still have to try out parameters specified in paper, find out which are useful) <br>The original base code for the block above this text and 2 blocks below was found at the following link, but it was modified for our dataset and to work with our 4 different models not just resnet: https://www.pluralsight.com/guides/introduction-to-resnet <br> <br> What I did with the models is called feature extraction, the models were all pretrained on imagenet: <br>
+# The block belos should be used as the main function for training our model AFTER we found the best features using the cross validation method with parameter search.<br>The original base code for the block above this text and 2 blocks below was found at the following link, but it was heavily modified for our dataset and to work with our 4 different models not just resnet: https://www.pluralsight.com/guides/introduction-to-resnet (i think its basic pytorch boilerplate code)<br> <br> What I did with the models is called feature extraction, the models were all pretrained on imagenet: <br>
 # 
 # In feature extraction, we start with a pretrained model and only update the final layer weights from which we derive predictions. It is called feature extraction because we use the pretrained CNN as a fixed feature-extractor, and only change the output layer.
 
@@ -269,7 +310,7 @@ def accuracy(out, labels):
 
 
 # Will plot the accuracy of the models below and save them to a file
-def plot_model_acc():
+def plot_model_acc(model_name, save_only=True):
     fig = plt.figure(figsize=(20,10))
     plt.title("Train-Validation Accuracy for {}".format(model_name))
     plt.plot(train_acc, label='train')
@@ -277,46 +318,49 @@ def plot_model_acc():
     plt.xlabel('num_epochs', fontsize=12)
     plt.ylabel('accuracy', fontsize=12)
     plt.legend(loc='best')
-    plt.savefig('./plots/{}_e{}_lr{}_bs{}.png'.format(model_name,n_epochs,str(learning_rate[model_name]).replace(".","dot"),batch_size), bbox_inches='tight')
+    if save_only:
+        plt.savefig('./plots/{}_lr{}_bs{}.png'.format(model_name,str(params_dict_main[model_name]["lr"]).replace(".","dot"),params_dict_main[model_name]["batch"]), bbox_inches='tight')
+        plt.clf()
+        plt.close('all')
 
 
 # In[13]:
 
 
-from optimizers import DemonRanger
+#from optimizers import DemonRanger # uncomment if using alternative optimizers
+#import adabound
 # this should be used after finding good starting parameters with the cross validation parameter tuning below
 # Parameters
-skip_this = True # find good starting parameters first, using cv, then set this to false
+skip_this = False # find good starting parameters first, using cv, then set this to false
 model_index = 0 # set model index to use here
-string_array = ["vgg","google_net","resnet","alexnet"]
+string_array = ["vgg","google_net","resnet","alexnet"] #["vgg","google_net","resnet","alexnet"] 
 
+torch.backends.cudnn.benchmark = True # speeds up training by some variable amount
 first_run = True
 while(True and not skip_this):
     if(len(string_array) > 0):
         if not first_run:
-            #Print and save graph
-            plot_model_acc()
-
-            del criterion # free up vram
-            del optimizer
-            del net
             torch.cuda.empty_cache()
             model_name = string_array.pop(0)
-            net = get_model(model_name)
+            net = get_saved_model(model_name,"TRAIN") 
+            #net = get_model(model_name)
         else:
             model_name = string_array[model_index]
-            net = get_model(model_name)
+            net = get_saved_model(model_name,"TRAIN")
+            #net = get_model(model_name)
             string_array.remove(model_name)
             first_run = False
 
-        # Parameters
+        # Parameters (train set, validation set, test set)
+        train_dataloader = DataLoader(dataset = train_dataset,batch_size = params_dict_main[model_name]["batch"],shuffle=True,num_workers=0,pin_memory=True,drop_last=True)
+        valid_dataloader = DataLoader(dataset = valid_dataset,batch_size = test_batch_size,shuffle=False,num_workers=0,pin_memory=True,drop_last=True)
         criterion = nn.CrossEntropyLoss() # used this since we have 5 mutually exclusive classes
-
-        demon_adam = DemonRanger(params=net.parameters(),
+        ''' # other options for optimizers
+        optimizer = DemonRanger(params=net.parameters(),
                                 lr=params_dict_main[model_name]["lr"],
                                 weight_decay=params_dict_main[model_name]["wd"],
                                 epochs = n_epochs,
-                                step_per_epoch = steps_per_epoch, 
+                                step_per_epoch = params_dict_main[model_name]["spe"], 
                                 betas=(0.9,0.999,0.999), # restore default AdamW betas
                                 nus=(1.0,1.0), # disables QHMomentum
                                 k=0,  # disables lookahead
@@ -329,17 +373,28 @@ while(True and not skip_this):
                                 use_gc=False, #disables gradient centralization
                                 amsgrad=False # disables amsgrad
                                 )
-        optimizer = optim.SGD(net.parameters(), lr=learning_rate[model_name], momentum=0.9)
+        optimizer = adabound.AdaBound(net.parameters(), lr=params_dict_main[model_name]["lr"], final_lr=0.1) 
 
+        '''
+        optimizer = optim.SGD(net.parameters(),  # the optimizer that was used for CV
+            lr=params_dict_main[model_name]["lr"],
+            weight_decay=params_dict_main[model_name]["wd"],
+            momentum=0.9
+        )
         improvement_patience = 0
     else:
-        plot_model_acc()
         break
     print("-------------------------------------------------------------------")
     print("Using model: {}".format(model_name))
     print_every = int(len(train_dataloader)*0.1) # print upon completion of every 10% of the dataset
     if print_every == 0: print_every = 1
-    valid_loss_min = np.Inf
+    
+    model_best_valid_loss = Path('./cross_validation/models/{}_best_model_TRAIN_best_loss.pt'.format(model_name))
+    if model_best_valid_loss.is_file(): # use saved best validation loss instead
+        valid_loss_min = torch.load('./cross_validation/models/{}_best_model_TRAIN_best_loss.pt'.format(model_name))
+    else:
+        valid_loss_min = np.Inf
+    
     val_loss = []
     val_acc = []
     train_loss = []
@@ -355,9 +410,6 @@ while(True and not skip_this):
             optimizer.zero_grad()
 
             outputs = net(data_)
-            #if model_name == "google_net": # for inception v3 (the google model we use): 
-                # net(data_) returns logits and aux logits in a touple, we just use logits
-                #outputs = outputs[0]
             loss = criterion(outputs, target_)
             loss.backward()
             optimizer.step()
@@ -380,7 +432,7 @@ while(True and not skip_this):
         correct_t=0
         with torch.no_grad():
             net.eval()
-            for data_t, target_t in (test_dataloader):
+            for data_t, target_t in (valid_dataloader):
                 data_t, target_t = data_t.to(device), target_t.to(device)
                 outputs_t = net(data_t)
                 loss_t = criterion(outputs_t, target_t)
@@ -389,23 +441,24 @@ while(True and not skip_this):
                 correct_t += torch.sum(pred_t==target_t).item()
                 total_t += target_t.size(0)
             val_acc.append(100 * correct_t/total_t)
-            val_loss.append(batch_loss/len(test_dataloader))
+            val_loss.append(batch_loss/len(valid_dataloader))
             network_learned = batch_loss < valid_loss_min
             print(f'validation loss: {np.mean(val_loss):.4f}, validation acc: {(100 * correct_t/total_t):.4f}\n')
 
-
+            #Print and save graph
+            plot_model_acc(model_name)
+            
             if network_learned:
                 valid_loss_min = batch_loss
-                torch.save(net.state_dict(), './cross_validation/models/{}_best_model_TRAIN.pt'.format(model_name))
+                torch.save(valid_loss_min, './cross_validation/models/{}_best_model_TRAIN_best_loss.pt'.format(model_name))
+                torch.save(net, './cross_validation/models/{}_best_model_TRAIN.pt'.format(model_name))
                 improvement_patience = 0
                 print('Improvement-Detected, save-model')
             else:
                 improvement_patience += 1
-        if improvement_patience > early_stopping_threshold: break
+        if improvement_patience > early_stopping_threshold:
+            break
         net.train()
-
-
-#print(target_,pred) # used for comparing correct class vs models predictions
 
 
 # Time can vary alot depending on your set parameters, cpu, gpu, whether you're using cuda etc. <br>
@@ -414,33 +467,18 @@ while(True and not skip_this):
 # 
 # Cross validation is done on the training set only, so 75% of the total, this set is then split into k folds (in our case 3) then the model is trained on k-1 folds and evaluated on the remaining 1 fold, after the cross validation, i evaluate the models on the before unseen test set (25% of total)
 
-# In[14]:
-
-
-from skorch import NeuralNetClassifier
-from skorch.dataset import CVSplit
-from skorch.helper import SliceDataset
-from sklearn.metrics import accuracy_score, f1_score
-from sklearn.experimental import enable_halving_search_cv # noqa this is a new recently added feature im trying out
-from sklearn.model_selection import GridSearchCV,HalvingGridSearchCV
-
-
-# In[15]:
+# In[ ]:
 
 
 import gc
 print("Skorch Version: ",skorch.__version__)
-#del gs
-#del net
 gc.collect()
 torch.cuda.empty_cache()
 
 
-# In[16]:
+# In[ ]:
 
 
-y_train = np.array(train.label)
-y_test = np.array(test.label)
 
 # because of vram, test this on your pc and try to use a range from 32 to 64
 vgg_batch = 17
@@ -477,7 +515,7 @@ params_dict = { # possible parameter combinations to evaluate
 best_estimators = []
 
 
-# In[17]:
+# In[ ]:
 
 
 string_array = ["vgg","google_net","resnet","alexnet"] # also the order
@@ -488,65 +526,52 @@ best_params_models = []
 # the code below basically compares the model tuned with the parameters above to find the best performing one, we then use
 # the bigger native pytorch code chunk above to actually train a model with the best found params and evaluate it
 first_run = True
-while(True and not skip_this):
-    if(len(string_array)>0):
-        model_name = string_array.pop(0)
-        net = get_model(model_name)
-        gc.collect()
-        torch.cuda.empty_cache()
-        torch.backends.cudnn.benchmark = True # speeds up training by some variable amount
-        first_run = False
-    else:
-        del gs
-        gc.collect()
-        torch.cuda.empty_cache()
-        break
-    print("---------------------")
-    print("---------------------")
-    print("Now cross validating {}------------------------------------------".format(model_name))
-    print("---------------------")
-    print("---------------------")
-    skorch_classifier = NeuralNetClassifier(
-        net,
-        max_epochs=5,
-        optimizer=torch.optim.SGD,
-        criterion=nn.CrossEntropyLoss,
-        device=device,
-    )
-    gs = HalvingGridSearchCV(skorch_classifier, # or GridSearchCV 
-                      param_grid=params_dict[model_name], 
-                      scoring='accuracy',
-                      refit='accuracy', # competition entries will be evaluated bassed on classification accuracy
-                      verbose=3, # outputs info
-                      cv=3, # because the percentages of labels across folds are close to equal (stratified), and label 1
-                     )      # only occurs 1000 times, 3 folds appears to be the maximum, with 333 cases of label 1 per fold
-    train_sliceable = SliceDataset(train_dataset)
-    gs.fit(train_sliceable, y_train)
-    best_params_models.append(gs.best_params_)
-    best_estimators.append(gs.best_estimator_) # saves the model
-    with open('./cross_validation/models/{}_best_model_CV.pickle'.format(model_name), 'wb') as handle:
-        pickle.dump(gs.best_estimator_, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    with open('./cross_validation/best_params_{}.json'.format(model_name), 'w') as jsonfile: # Save best params for each model
-        json.dump(gs.best_params_, jsonfile)
-    
-print(best_params_models) # order = ["vgg","google_net","resnet","alexnet"]
-with open('./cross_validation/best_params.json', 'w') as jsonfile: # Save best params for each model
-    json.dump(best_params_models, jsonfile)  
-
-
-# In[20]:
-
-
-# RUN THIS if models are already saved
-skip_this = False
-
-string_array = ["vgg","google_net","resnet","alexnet"] 
+y_train = np.array(train.label)
 if not skip_this:
-    best_estimators = []
-    for model_name in string_array:
-        with open(r"./cross_validation/models/{}_best_model_CV_v2.pickle".format(model_name), "rb") as input_file:
-            e = pickle.load(input_file)
-            best_estimators.append(e)
+    while(True):
+        if(len(string_array)>0):
+            model_name = string_array.pop(0)
+            net = get_model(model_name)
+            gc.collect()
+            torch.cuda.empty_cache()
+            torch.backends.cudnn.benchmark = True # speeds up training by some variable amount
+            first_run = False
+        else:
+            del gs
+            gc.collect()
+            torch.cuda.empty_cache()
+            break
+        print("---------------------")
+        print("---------------------")
+        print("Now cross validating {}------------------------------------------".format(model_name))
+        print("---------------------")
+        print("---------------------")
+        skorch_classifier = NeuralNetClassifier(
+            net,
+            max_epochs=5,
+            optimizer=torch.optim.SGD,
+            criterion=nn.CrossEntropyLoss,
+            device=device,
+        )
+        gs = HalvingGridSearchCV(skorch_classifier, # or GridSearchCV 
+                          param_grid=params_dict[model_name], 
+                          scoring='accuracy',
+                          refit='accuracy', # competition entries will be evaluated bassed on classification accuracy
+                          verbose=3, # outputs info
+                          cv=3, # because the percentages of labels across folds are close to equal (stratified), and label 1
+                         )      # only occurs 1000 times, 3 folds appears to be the maximum, with 333 cases of label 1 per fold
+        train_sliceable = SliceDataset(train_dataset)
+        gs.fit(train_sliceable, y_train)
+        best_params_models.append(gs.best_params_)
+        best_estimators.append(gs.best_estimator_) # saves the model
+        with open('./cross_validation/models/{}_best_model_CV.pickle'.format(model_name), 'wb') as handle:
+            pickle.dump(gs.best_estimator_, handle, protocol=pickle.HIGHEST_PROTOCOL)
+        with open('./cross_validation/best_params_{}.json'.format(model_name), 'w') as jsonfile: # Save best params for each model
+            json.dump(gs.best_params_, jsonfile)
+
+    print(best_params_models) # order = ["vgg","google_net","resnet","alexnet"]
+    with open('./cross_validation/best_params.json', 'w') as jsonfile: # Save best params for each model
+        json.dump(best_params_models, jsonfile)  
 
 
 # In[ ]:
@@ -554,9 +579,12 @@ if not skip_this:
 
 # here load all the best models and evaluate each on the test set 
 # since they are too big to predict all at once (32 gb ram, 8 gb vram) , i load them in batches
-test_batch = 4
 
-for index, model in enumerate(best_estimators):
+test_batch = 15
+y_test = np.array(test.label)
+string_array = ["vgg","google_net","resnet","alexnet"] # ["vgg","google_net","resnet","alexnet"]
+for model_name in string_array:
+    model = get_saved_model(model_name,"TRAIN",skorch_wrap=True)
     y_predictions = []
     for i in range(0,len(test_dataset),test_batch):
         if len(test_dataset) == i:
@@ -570,19 +598,7 @@ for index, model in enumerate(best_estimators):
         temp_list = torch.stack(temp_list)
         y_predictions.append(model.predict(temp_list))
     y_predictions = [item for sublist in y_predictions for item in sublist]
-    print("!!!! Model {} Accuracy on test set: {}, f1macro-score: {}".format(string_array[index],accuracy_score(y_test,y_predictions),f1_score(y_test,y_predictions,average='macro')))
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
+    print("!!!! Model {} Accuracy on test set: {}, f1macro-score: {}".format(model_name,accuracy_score(y_test,y_predictions),f1_score(y_test,y_predictions,average='macro')))
 
 
 # In[ ]:
