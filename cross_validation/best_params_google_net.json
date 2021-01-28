@@ -1,1 +1,0 @@
-{"batch_size": 32, "lr": 0.001, "optimizer__momentum": 0.9, "optimizer__weight_decay": 0.001}

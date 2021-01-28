@@ -1,0 +1,17 @@
+demon_adam = DemonRanger(params=model.parameters(),
+                        lr=config.lr,
+                        'optimizer__weight_decay':config.wd,
+                        'optimizer__epochs' : 5,
+                        'optimizer__step_per_epoch' : int(len(y_train)/vgg_batch), 
+                        'optimizer__betas':(0.9,0.999,0.999), # restore default AdamW betas
+                        'optimizer__nus':(1.0,1.0), # disables QHMomentum
+                        'optimizer__k':0,  # disables lookahead
+                        'optimizer__alpha':1.0, 
+                        'optimizer__IA':False, # enables Iterate Averaging
+                        'optimizer__rectify':False, # disables RAdam Recitification
+                        'optimizer__AdaMod':False, #disables AdaMod
+                        'optimizer__AdaMod_bias_correct':False, #disables AdaMod bias corretion (not used originally)
+                        'optimizer__use_demon':True, #enables Decaying Momentum (DEMON)
+                        'optimizer__use_gc':False, #disables gradient centralization
+                        'optimizer__amsgrad':False # disables amsgrad
+                        )
