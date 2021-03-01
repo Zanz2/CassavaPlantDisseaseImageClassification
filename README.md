@@ -1,0 +1,1 @@
+Entry to the cassava leaf dissease classification challenge (https://www.kaggle.com/c/cassava-leaf-disease-classification) Model achieved 0.8733 final public score. Well below average of all the entries, but by itself pretty good (majority classifier was 0.62)
